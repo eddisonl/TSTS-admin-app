@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { CTable, CTableHead, CTableBody, CTableRow,CTableHeaderCell, CBadge, CPagination, CPaginationItem} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import { cilPen, cilPencil, cilTrash } from "@coreui/icons";
 
 export default function DriverManagement() {
   const [drivers] = useState([
@@ -36,43 +39,59 @@ export default function DriverManagement() {
       </div>
 
       <div className="table-container">
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Driver Name</th>
-              <th>License Number</th>
-              <th>Rating</th>
-              <th>Trips Completed</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
+        <CTable striped hover className="data-table">
+          <CTableHead color="danger">
+            <CTableRow>
+              <CTableHeaderCell>Driver Name</CTableHeaderCell>
+              <CTableHeaderCell>License Number</CTableHeaderCell>
+              <CTableHeaderCell>Rating</CTableHeaderCell>
+              <CTableHeaderCell>Trips Completed</CTableHeaderCell>
+              <CTableHeaderCell>Status</CTableHeaderCell>
+              <CTableHeaderCell>Actions</CTableHeaderCell>
+            </CTableRow>
+          </CTableHead>
+          <CTableBody>
             {drivers.map((driver) => (
-              <tr key={driver.id}>
-                <td className="font-semibold">{driver.name}</td>
-                <td>{driver.license}</td>
-                <td>
+              <CTableRow key={driver.id}>
+                <CTableHeaderCell className="font-semibold">{driver.name}</CTableHeaderCell>
+                <CTableHeaderCell>{driver.license}</CTableHeaderCell>
+                <CTableHeaderCell>
                   <span className="stars">
                     {"⭐".repeat(Math.floor(driver.rating))}
                   </span>
                   {driver.rating}
-                </td>
-                <td>{driver.trips}</td>
-                <td>
-                  <span className={`badge badge-${driver.status}`}>
+                </CTableHeaderCell>
+                <CTableHeaderCell>{driver.trips}</CTableHeaderCell>
+                <CTableHeaderCell>
+                  <CBadge color={driver.status === "pending" ? "danger" : "success"} className={`badge badge-${driver.status}`}>
                     {driver.status.charAt(0).toUpperCase() +
                       driver.status.slice(1)}
-                  </span>
-                </td>
-                <td>
+                  </CBadge>
+                </CTableHeaderCell>
+                <CTableHeaderCell>
                   <button className="action-btn">View</button>
                   <button className="action-btn">Verify</button>
-                </td>
-              </tr>
+                </CTableHeaderCell>
+              </CTableRow>
             ))}
-          </tbody>
-        </table>
+          </CTableBody>
+        </CTable>
+        <div style={{display:'flex', justifyContent:'space-between'}}>
+        <span style={{fontSize:'11px'}}>
+          {} of {}
+        </span>
+                <CPagination size="sm" aria-label="Page navigation example">
+              <CPaginationItem aria-label="Previous" disabled>
+                <span aria-hidden="true">&laquo;</span>
+              </CPaginationItem>
+              <CPaginationItem active>1</CPaginationItem>
+              <CPaginationItem>2</CPaginationItem>
+              <CPaginationItem>3</CPaginationItem>
+              <CPaginationItem aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </CPaginationItem>
+            </CPagination>
+      </div>
       </div>
     </div>
   );

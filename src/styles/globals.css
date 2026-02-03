@@ -318,12 +318,21 @@ body,
 }
 
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 250px;
   background: white;
+  transition: width 0.3s ease;
+  z-index: 1000;
   border-right: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
+  height: 100vh;
   overflow-y: auto;
+}
+.sidebar.collapsed {
+  width: 80px;
 }
 
 .sidebar-header {
@@ -341,6 +350,7 @@ body,
 }
 
 .nav-item {
+  text-decoration: none;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -366,6 +376,7 @@ body,
 }
 
 .nav-icon {
+  text-decoration: none;
   font-size: 20px;
 }
 
@@ -374,12 +385,18 @@ body,
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  margin-left: 250px;
+  transition: margin-left 0.3s ease;
+}
+
+.main-content.sidebar-collapsed {
+  margin-left: 80px;
 }
 
 .topbar {
   background: white;
   border-bottom: 1px solid #e5e7eb;
-  padding: 20px 32px;
+  padding: 8px 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -554,7 +571,7 @@ body,
 
 .user-info {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .user-info p {
@@ -567,8 +584,8 @@ body,
 
 .user-menu {
   position: absolute;
-  top: 100%;
-  right: 0;
+  top: 8.5%;
+  right: 2%;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
@@ -621,7 +638,7 @@ body,
 .section {
   background: white;
   border-radius: 12px;
-  padding: 32px;
+  padding: 22px;
   margin: 20px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
@@ -634,8 +651,8 @@ body,
 }
 
 .section-title {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 650;
   color: var(--gray-900);
   margin: 0;
 }
@@ -1018,7 +1035,38 @@ body,
 
 .btn-export {
   padding: 10px 16px;
-  background: white;
+  background: rgba(255, 255, 255, 0.336);
   color: var(--accent);
   border: 1px solid var(--accent);
+}
+.stats-grid, .compliance-stats{
+  margin-top: 1em;
+  display: flex;
+  justify-content: space-between;
+  background-color: #d1d2d6;
+  color: #f1f1f1;
+  padding: 1em;
+  gap: 1em;
+  border-radius: 0.4em;
+}
+.stat-card, .compliance-card{
+  background-color: #8eb1a6;
+  padding: 0.4em;
+  border-radius: 0.4em;
+  width: 50%;
+  /* min-height: 6em; */
+  box-shadow:  0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.data-table{
+  width: 100%;
+  font-size: 12px;
+}
+.action-btn{
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+p {
+  margin-top: 0;
+  margin-bottom: 0 !important;
 }

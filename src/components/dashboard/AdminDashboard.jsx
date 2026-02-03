@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Sidebar from "../layout/Sidebar";
 import Topbar from "../layout/Topbar";
 
 export default function AdminDashboard({ user, onLogout, children }) {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
 
   // Extract active section from current path

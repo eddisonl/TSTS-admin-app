@@ -18,19 +18,19 @@ export default function Overview() {
 
       <div className="stats-grid">
         {stats.map((stat, idx) => (
-          <div key={idx} className="stat-card">
+          <div key={idx} style={{display:'flex', gap:'1em'}} className="stat-card">
             <div className="stat-icon">{stat.icon}</div>
             <div className="stat-content">
-              <p className="stat-label">{stat.label}</p>
-              <p className="stat-value">{stat.value}</p>
+              <p className="stat-label" style={{fontWeight:'700'}}>{stat.label}</p>
+              <p className="stat-value" style={{fontWeight:'600'}}>{stat.value}</p>
               <p className="stat-change positive">{stat.change}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="chart-section">
-        <div className="chart-card">
+      <div className="chart-section" >
+        <div className="chart-card" >
           <h3 className="text-lg font-semibold text-white mb-4">
             Daily Revenue Trend
           </h3>

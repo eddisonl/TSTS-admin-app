@@ -1,7 +1,14 @@
-import React from "react";
+import React,{useState} from "react";
+import { CTable, CTableHead, CTableBody, CTableRow,CTableHeaderCell, CBadge, CPagination, CPaginationItem, CFormInput} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import { cibReadme, cilPen, cilPencil, cilTrash } from "@coreui/icons";
 
 export default function ComplianceTracking() {
-  const [violations] = React.useState([
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10
+  const [searchViolation, setSearchViolation] = useState ("")
+
+  const [violations] = useState([
     {
       id: 1,
       vehicle: "GT-2345",
@@ -26,59 +33,188 @@ export default function ComplianceTracking() {
       date: "2024-01-08",
       status: "resolved",
     },
+    {
+      id: 4,
+      vehicle: "GT-2347",
+      driver: "Isaac Owusu",
+      violation: "Missing Documents",
+      date: "2024-01-08",
+      status: "resolved",
+    },
+    {
+      id:5,
+      vehicle: "GT-2347",
+      driver: "Isaac Owusu",
+      violation: "Missing Documents",
+      date: "2024-01-08",
+      status: "resolved",
+    },
+    {
+      id: 6,
+      vehicle: "GT-2347",
+      driver: "Isaac Owusu",
+      violation: "Missing Documents",
+      date: "2024-01-08",
+      status: "resolved",
+    },
+    {
+      id: 7,
+      vehicle: "GT-2347",
+      driver: "Isaac Owusu",
+      violation: "Missing Documents",
+      date: "2024-01-08",
+      status: "resolved",
+    },
+    {
+      id: 8,
+      vehicle: "GT-2347",
+      driver: "Isaac Owusu",
+      violation: "Missing Documents",
+      date: "2024-01-08",
+      status: "resolved",
+    },
+    {
+      id: 9,
+      vehicle: "GT-2347",
+      driver: "Isaac Owusu",
+      violation: "Missing Documents",
+      date: "2024-01-08",
+      status: "resolved",
+    },
+    {
+      id: 10,
+      vehicle: "GT-2347",
+      driver: "Isaac Owusu",
+      violation: "Missing Documents",
+      date: "2024-01-08",
+      status: "resolved",
+    },    {
+      id: 11,
+      vehicle: "GT-2347",
+      driver: "Isaac Owusu",
+      violation: "Missing Documents",
+      date: "2024-01-08",
+      status: "resolved",
+    },    {
+      id: 12,
+      vehicle: "GT-2347",
+      driver: "Isaac Owusu",
+      violation: "Missing Documents",
+      date: "2024-01-08",
+      status: "resolved",
+    },
   ]);
+
+  const filteredViolations = violations.filter((v) =>
+    Object.values(v)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchViolation.toLowerCase())
+  );
+
+  const totalItems = violations.length
+  const totalPages = Math.ceil(totalItems / itemsPerPage)
+
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+
+  const currentItems = filteredViolations.slice(startIndex, endIndex)
 
   return (
     <div className="section">
       <h2 className="section-title">Compliance Tracking</h2>
 
-      <div className="compliance-stats">
+      <div style={{display:"flex", width:'100%', justifyContent:'space-between', marginBottom:'1em'}} className="compliance-stats">
         <div className="compliance-card">
-          <p className="text-sm text-gray-400">Total Violations</p>
-          <p className="text-3xl font-bold text-white">47</p>
+          <p className="text-sm text-400">Total Violations</p>
+          <p className="text-3xl font-bold">47</p>
         </div>
         <div className="compliance-card">
-          <p className="text-sm text-gray-400">Pending Issues</p>
+          <p className="text-sm text-400">Pending Issues</p>
           <p className="text-3xl font-bold text-orange-500">12</p>
         </div>
         <div className="compliance-card">
-          <p className="text-sm text-gray-400">Resolved</p>
+          <p className="text-sm text-400">Resolved</p>
           <p className="text-3xl font-bold text-green-500">35</p>
         </div>
       </div>
 
+      <CFormInput type="search" size="sm" placeholder="search violations..." value={searchViolation}
+       onChange={(e) => {
+        setSearchViolation(e.target.value);
+        setCurrentPage(1)
+       }} />
+
       <div className="table-container">
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Vehicle</th>
-              <th>Driver</th>
-              <th>Violation Type</th>
-              <th>Date Reported</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {violations.map((violation) => (
-              <tr key={violation.id}>
-                <td className="font-semibold">{violation.vehicle}</td>
-                <td>{violation.driver}</td>
-                <td>{violation.violation}</td>
-                <td>{violation.date}</td>
-                <td>
-                  <span className={`badge badge-${violation.status}`}>
+        {/* <span style={{height:"18em", overflowY:"scroll", display:'flex', flexDirection:'column'}}> */}
+        <CTable striped hover className="data-table" >
+          <CTableHead color="danger">
+            <CTableRow>
+              <CTableHeaderCell>Vehicle</CTableHeaderCell>
+              <CTableHeaderCell>Driver</CTableHeaderCell>
+              <CTableHeaderCell>Violation Type</CTableHeaderCell>
+              <CTableHeaderCell>Date Reported</CTableHeaderCell>
+              <CTableHeaderCell>Status</CTableHeaderCell>
+              <CTableHeaderCell style={{textAlign:"center"}}>Actions</CTableHeaderCell>
+            </CTableRow>
+          </CTableHead>
+          <CTableBody >
+            {currentItems.map((violation) => (
+              <CTableRow key={violation.id}>
+                <CTableHeaderCell className="font-semibold">{violation.vehicle}</CTableHeaderCell>
+                <CTableHeaderCell>{violation.driver}</CTableHeaderCell>
+                <CTableHeaderCell>{violation.violation}</CTableHeaderCell>
+                <CTableHeaderCell>{violation.date}</CTableHeaderCell>
+                <CTableHeaderCell>
+                  <CBadge color={violation.status === "pending" ? "danger" : "success"} className={`badge badge-${violation.status}`}>
                     {violation.status.charAt(0).toUpperCase() +
                       violation.status.slice(1)}
-                  </span>
-                </td>
-                <td>
-                  <button className="action-btn">Review</button>
-                </td>
-              </tr>
+                  </CBadge>
+                </CTableHeaderCell>
+                <CTableHeaderCell style={{display:'flex', gap:"1em", justifyContent:'center'}}>
+               <CIcon className="action-btn" style={{color:"red"}} icon={cilTrash}/>
+               <CIcon className="action-btn" style={{color:"blue"}} icon={cibReadme}/>
+                </CTableHeaderCell>
+              </CTableRow>
             ))}
-          </tbody>
-        </table>
+          </CTableBody>
+        </CTable>
+        {/* </span> */}
+
+        <div style={{display:'flex', justifyContent:'space-between',alignItems:"flex-end"}}>
+        <span style={{fontSize:'11px'}}>
+        {startIndex + 1}–{Math.min(endIndex, totalItems)} of {totalItems}
+        </span>
+        <CPagination size="sm">
+        <CPaginationItem
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+        >
+          &laquo;
+        </CPaginationItem>
+
+        {[...Array(totalPages)].map((_, index) => {
+          const page = index + 1;
+          return (
+            <CPaginationItem
+              key={page}
+              active={page === currentPage}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+      </CPaginationItem>
+    );
+  })}
+
+  <CPaginationItem
+    disabled={currentPage === totalPages}
+    onClick={() => setCurrentPage(currentPage + 1)}
+  >
+    &raquo;
+  </CPaginationItem>
+        </CPagination>
+        </div>
+
       </div>
     </div>
   );

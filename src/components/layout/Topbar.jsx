@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CFormSelect } from "@coreui/react"
 
 export default function Topbar({ user, onLogout, activeSection }) {
   const navigate = useNavigate();
@@ -30,6 +31,24 @@ export default function Topbar({ user, onLogout, activeSection }) {
       read: true,
     },
   ]);
+
+  const userProfileSelect = [
+    {
+      id: 1,
+      name: "⚙️ Settings",
+    },
+    {
+      id: 2,
+      name: "Profile Settings",
+    },  {
+      id: 3,
+      name: "Change Password",
+    },
+    {
+      id: 4,
+      name: "Logout",
+    },
+  ]
   const [showNotifications, setShowNotifications] = useState(false);
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -95,27 +114,28 @@ export default function Topbar({ user, onLogout, activeSection }) {
             )}
           </div>
 
-          <div className="relative">
-            <button
-              onClick={() => setShowUserMenu(!showUserMenu)}
+         <div className="user-info" style={{gap:'0.5em'}}>
+            <button onClick={() => setShowUserMenu(!showUserMenu)}
               className="user-button"
             >
               <div className="user-avatar">👤</div>
-              <div className="user-info">
+            </button>
+            <span >
                 <p className="text-sm font-semibold text-gray-900">
                   {user.name}
                 </p>
                 <p className="text-xs text-gray-500">{user.email}</p>
+            </span>
               </div>
-            </button>
+          <div className="relative" style={{display:'flex', justifyContent:'space-between'}}>        
 
+            
             {showUserMenu && (
               <div className="user-menu">
+    
                 <button onClick={handleSettingsClick} className="menu-item">
                   ⚙️ Settings
                 </button>
-                <button className="menu-item">Profile Settings</button>
-                <button className="menu-item">Change Password</button>
                 <hr className="menu-divider" />
                 <button onClick={onLogout} className="menu-item logout-item">
                   Logout

@@ -10,6 +10,10 @@ import Analytics from "./components/sections/Analytics";
 import Notifications from "./components/sections/Notifications";
 import Settings from "./components/sections/Settings";
 import Reports from "./components/sections/Reports";
+import * as icon from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
+
+
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
