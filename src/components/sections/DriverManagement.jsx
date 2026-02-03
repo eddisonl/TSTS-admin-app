@@ -29,6 +29,14 @@ export default function DriverManagement() {
       trips: 567,
       status: "pending",
     },
+    {
+      id: 4,
+      name: "Isaac Sampson",
+      license: "DR-12347",
+      rating: 4.5,
+      trips: 567,
+      status: "pending",
+    },
   ]);
 
   return (
