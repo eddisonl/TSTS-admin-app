@@ -5,6 +5,7 @@ import Topbar from "../layout/Topbar";
 
 export default function AdminDashboard({ user, onLogout, children }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const location = useLocation();
 
   // Extract active section from current path
@@ -23,14 +24,36 @@ export default function AdminDashboard({ user, onLogout, children }) {
 
   const activeSection = getActiveSection();
 
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
+
   return (
     <div className="dashboard-layout">
-      <Sidebar />
-      <div className="main-content">
+      {mobileSidebarOpen && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setMobileSidebarOpen(false)}
+        />
+      )}
+      <Sidebar
+        collapsed={sidebarCollapsed}
+        onToggle={toggleSidebar}
+        mobileOpen={mobileSidebarOpen}
+        onCloseMobile={() => setMobileSidebarOpen(false)}
+      />
+      <div
+        className={`main-content ${
+          sidebarCollapsed ? "sidebar-collapsed" : ""
+        }`}
+      >
         <Topbar
           user={user}
           onLogout={onLogout}
           activeSection={activeSection}
+          onToggleMobileSidebar={() =>
+            setMobileSidebarOpen((prevOpen) => !prevOpen)
+          }
         />
         <div className="content-area">{children}</div>
       </div>

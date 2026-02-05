@@ -1,0 +1,244 @@
+/* Layout container */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f3f4f6;
+  color: #111827;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+/* Backdrop for mobile sidebar */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  backdrop-filter: none;
+  z-index: 20;
+  display: none;
+}
+
+/* Sidebar base */
+.sidebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  background: #e9eaec;
+  color: #111827;
+  padding: 1rem 0.75rem;
+  box-shadow: 2px 0 8px rgba(214, 216, 219, 0.5);
+  transition: width 0.25s ease, transform 0.25s ease;
+  z-index: 40;
+}
+
+.sidebar.collapsed {
+  width: 72px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+/* .sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+} */
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  color: #4b5563;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.nav-item .nav-icon {
+  font-size: 1.1rem;
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: #f9fafb;
+}
+
+.nav-item:hover {
+  background: rgba(55, 65, 81, 0.7);
+  color: #f9fafb;
+  transform: translateY(-1px);
+}
+
+.nav-item.collapsed .nav-label {
+  display: none;
+}
+
+/* Main content */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.content-area {
+  padding: 1rem;
+}
+
+/* Topbar */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.topbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  gap: 1rem;
+}
+
+.topbar-title h1 {
+  margin: 0;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.notification-button {
+  position: relative;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -0.1rem;
+  right: -0.2rem;
+  background: #ef4444;
+  color: #f9fafb;
+  border-radius: 999px;
+  padding: 0 0.3rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.user-info .user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e5e7eb;
+}
+
+.user-menu {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: #ffffff;
+  box-shadow: 0 12px 25px rgba(15, 23, 42, 0.18);
+  border-radius: 0.75rem;
+  padding: 0.4rem;
+  min-width: 180px;
+  z-index: 50;
+}
+
+.user-menu .menu-item {
+  width: 100%;
+  padding: 0.55rem 0.85rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.9rem;
+  color: #111827;
+  cursor: pointer;
+}
+
+.user-menu .menu-item:hover {
+  background: #f3f4f6;
+}
+
+.user-menu .logout-item {
+  color: #b91c1c;
+}
+
+.menu-divider {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 0.25rem 0;
+}
+
+/* Mobile behavior */
+.mobile-sidebar-toggle {
+  display: none !important;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-layout {
+    position: relative;
+  }
+
+  .sidebar-backdrop {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    width: 260px;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    width: 100%;
+  }
+
+  .mobile-sidebar-toggle {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar-content {
+    padding-inline: 1rem;
+  }
+
+  .topbar-title h1 {
+    font-size: 1rem;
+  }
+
+  .topbar-title p {
+    font-size: 0.75rem;
+  }
+
+  .topbar-actions {
+    gap: 0.5rem;
+  }
+}

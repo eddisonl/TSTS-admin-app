@@ -1,9 +1,22 @@
 import React, { useState } from "react";
-import { CTable, CTableHead, CTableBody, CTableRow,CTableHeaderCell, CBadge, CPagination, CPaginationItem} from "@coreui/react";
+import {
+  CTable,
+  CTableHead,
+  CTableBody,
+  CTableRow,
+  CTableHeaderCell,
+  CBadge,
+  CPagination,
+  CPaginationItem,
+  CFormInput,
+} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilPen, cilPencil, cilTrash } from "@coreui/icons";
 
 export default function VehicleManagement() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const [searchVehicles, setSearchVehicles] = useState("");
   const [vehicles] = useState([
     {
       id: 1,
@@ -30,6 +43,20 @@ export default function VehicleManagement() {
       status: "maintenance",
     },
   ]);
+  const filteredVehicles = vehicles.filter((v) =>
+    Object.values(v)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchVehicles.toLowerCase())
+  );
+
+  const totalItems = vehicles.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const currentItems = filteredVehicles.slice(startIndex, endIndex);
 
   return (
     <div className="section">
@@ -38,54 +65,99 @@ export default function VehicleManagement() {
         <button className="btn-primary">Register New Vehicle</button>
       </div>
 
-        <CTable striped hover className="data-table" >
-          <CTableHead color="danger">
-            <CTableRow>
-              <CTableHeaderCell scope="col">Plate Number</CTableHeaderCell >
-              <CTableHeaderCell scope="col">Model</CTableHeaderCell >
-              <CTableHeaderCell scope="col">Capacity</CTableHeaderCell >
-              <CTableHeaderCell scope="col" >Driver</CTableHeaderCell >
-              <CTableHeaderCell scope="col">Status</CTableHeaderCell >
-              <CTableHeaderCell scope="col">Actions</CTableHeaderCell >
+      <CFormInput
+        className="search-input"
+        type="search"
+        size="sm"
+        placeholder="search vehicles..."
+        value={searchVehicles}
+        onChange={(e) => {
+          setSearchVehicles(e.target.value);
+          setCurrentPage(1);
+        }}
+      />
+      <CTable striped hover className="data-table">
+        <CTableHead color="danger">
+          <CTableRow>
+            <CTableHeaderCell scope="col">Plate Number</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Model</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Capacity</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Driver</CTableHeaderCell>
+            <CTableHeaderCell scope="col">Status</CTableHeaderCell>
+            <CTableHeaderCell style={{ textAlign: "center" }} scope="col">
+              Actions
+            </CTableHeaderCell>
+          </CTableRow>
+        </CTableHead>
+        <CTableBody>
+          {currentItems.map((vehicle) => (
+            <CTableRow key={vehicle.id}>
+              <CTableHeaderCell>{vehicle.plate}</CTableHeaderCell>
+              <CTableHeaderCell>{vehicle.model}</CTableHeaderCell>
+              <CTableHeaderCell>{vehicle.capacity} seats</CTableHeaderCell>
+              <CTableHeaderCell>{vehicle.driver}</CTableHeaderCell>
+              <CTableHeaderCell>
+                <CBadge
+                  color={
+                    vehicle.status === "maintenance" ? "primary" : "success"
+                  }
+                  className={`badge badge-${vehicle.status}`}
+                >
+                  {vehicle.status.charAt(0).toUpperCase() +
+                    vehicle.status.slice(1)}
+                </CBadge>
+              </CTableHeaderCell>
+              <CTableHeaderCell style={{ gap: "1em" }}>
+                <span
+                  style={{
+                    display: "flex",
+                    gap: "1em",
+                    justifyContent: "center",
+                  }}
+                >
+                  <button type="button" className="action-btn">
+                    <CIcon style={{ color: "red" }} icon={cilTrash} />
+                  </button>
+                  <button type="button" className="action-btn">
+                    <CIcon style={{ color: "blue" }} icon={cilPencil} />
+                  </button>
+                </span>
+              </CTableHeaderCell>
             </CTableRow>
-          </CTableHead>
-          <CTableBody>
-            {vehicles.map((vehicle) => (
-              <CTableRow key={vehicle.id}>
-                <CTableHeaderCell >{vehicle.plate}</CTableHeaderCell>
-                <CTableHeaderCell >{vehicle.model}</CTableHeaderCell >
-                <CTableHeaderCell >{vehicle.capacity} seats</CTableHeaderCell >
-                <CTableHeaderCell >{vehicle.driver}</CTableHeaderCell >
-                <CTableHeaderCell >
-                  <CBadge color={ vehicle.status === "maintenance" ? "primary" : "success"} className={`badge badge-${vehicle.status}`}>
-                    {vehicle.status.charAt(0).toUpperCase() +
-                      vehicle.status.slice(1)}
-                  </CBadge>
-                </CTableHeaderCell >
-                <CTableHeaderCell style={{display:'flex', justifyContent:'space-between'}} >
-                  <button type="button" className="action-btn"><CIcon style={{color:"red"}} icon={cilTrash}/></button>
-                  <button type="button" className="action-btn"><CIcon style={{color:"blue"}} icon={cilPencil}/></button>
-                </CTableHeaderCell >
-              </CTableRow>
-            ))}
-          </CTableBody>
-        </CTable>
-        <div style={{display:'flex', justifyContent:'space-between'}}>
-        <span style={{fontSize:'11px'}}>
-          {} of {}
+          ))}
+        </CTableBody>
+      </CTable>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <span style={{ fontSize: "11px" }}>
+          {startIndex + 1}–{Math.min(endIndex, totalItems)} of {totalItems}
         </span>
-        <CPagination size="sm" aria-label="Page navigation example">
-      <CPaginationItem aria-label="Previous" disabled>
-        <span aria-hidden="true">&laquo;</span>
-      </CPaginationItem>
-      <CPaginationItem active>1</CPaginationItem>
-      <CPaginationItem>2</CPaginationItem>
-      <CPaginationItem>3</CPaginationItem>
-      <CPaginationItem aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </CPaginationItem>
-    </CPagination>
-    </div>
+        <CPagination size="sm">
+          <CPaginationItem
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            &laquo;
+          </CPaginationItem>
+          {[...Array(totalPages)].map((_, index) => {
+            const page = index + 1;
+            return (
+              <CPaginationItem
+                key={page}
+                active={page === currentPage}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </CPaginationItem>
+            );
+          })}
+          <CPaginationItem
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            &raquo;
+          </CPaginationItem>
+        </CPagination>
+      </div>
     </div>
   );
 }

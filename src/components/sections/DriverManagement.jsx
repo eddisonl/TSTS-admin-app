@@ -1,9 +1,22 @@
 import React, { useState } from "react";
-import { CTable, CTableHead, CTableBody, CTableRow,CTableHeaderCell, CBadge, CPagination, CPaginationItem} from "@coreui/react";
+import {
+  CTable,
+  CFormInput,
+  CTableHead,
+  CTableBody,
+  CTableRow,
+  CTableHeaderCell,
+  CBadge,
+  CPagination,
+  CPaginationItem,
+} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { cilPen, cilPencil, cilTrash } from "@coreui/icons";
+import { cilFolderOpen, cilPencil, cilTask } from "@coreui/icons";
 
 export default function DriverManagement() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const [searchDVManagement, setDVManagement] = useState("");
   const [drivers] = useState([
     {
       id: 1,
@@ -38,6 +51,20 @@ export default function DriverManagement() {
       status: "pending",
     },
   ]);
+  const filteredDVMang = drivers.filter((d) =>
+    Object.values(d)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchDVManagement.toLowerCase())
+  );
+
+  const totalItems = drivers.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const currentItems = filteredDVMang.slice(startIndex, endIndex);
 
   return (
     <div className="section">
@@ -46,6 +73,17 @@ export default function DriverManagement() {
         <button className="btn-primary">Register Driver</button>
       </div>
 
+      <CFormInput
+        className="search-input"
+        type="search"
+        size="sm"
+        placeholder="search violations..."
+        value={searchDVManagement}
+        onChange={(e) => {
+          setDVManagement(e.target.value);
+          setCurrentPage(1);
+        }}
+      />
       <div className="table-container">
         <CTable striped hover className="data-table">
           <CTableHead color="danger">
@@ -55,13 +93,17 @@ export default function DriverManagement() {
               <CTableHeaderCell>Rating</CTableHeaderCell>
               <CTableHeaderCell>Trips Completed</CTableHeaderCell>
               <CTableHeaderCell>Status</CTableHeaderCell>
-              <CTableHeaderCell>Actions</CTableHeaderCell>
+              <CTableHeaderCell style={{ textAlign: "center" }}>
+                Actions
+              </CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {drivers.map((driver) => (
+            {currentItems.map((driver) => (
               <CTableRow key={driver.id}>
-                <CTableHeaderCell className="font-semibold">{driver.name}</CTableHeaderCell>
+                <CTableHeaderCell className="font-semibold">
+                  {driver.name}
+                </CTableHeaderCell>
                 <CTableHeaderCell>{driver.license}</CTableHeaderCell>
                 <CTableHeaderCell>
                   <span className="stars">
@@ -71,35 +113,61 @@ export default function DriverManagement() {
                 </CTableHeaderCell>
                 <CTableHeaderCell>{driver.trips}</CTableHeaderCell>
                 <CTableHeaderCell>
-                  <CBadge color={driver.status === "pending" ? "danger" : "success"} className={`badge badge-${driver.status}`}>
+                  <CBadge
+                    color={driver.status === "pending" ? "danger" : "success"}
+                    className={`badge badge-${driver.status}`}
+                  >
                     {driver.status.charAt(0).toUpperCase() +
                       driver.status.slice(1)}
                   </CBadge>
                 </CTableHeaderCell>
                 <CTableHeaderCell>
-                  <button className="action-btn">View</button>
-                  <button className="action-btn">Verify</button>
+                  <span
+                    style={{
+                      display: "flex",
+                      gap: "1em",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <CIcon style={{ color: "blue" }} icon={cilFolderOpen} />
+                    <CIcon style={{ color: "green" }} icon={cilTask} />
+                  </span>
                 </CTableHeaderCell>
               </CTableRow>
             ))}
           </CTableBody>
         </CTable>
-        <div style={{display:'flex', justifyContent:'space-between'}}>
-        <span style={{fontSize:'11px'}}>
-          {} of {}
-        </span>
-                <CPagination size="sm" aria-label="Page navigation example">
-              <CPaginationItem aria-label="Previous" disabled>
-                <span aria-hidden="true">&laquo;</span>
-              </CPaginationItem>
-              <CPaginationItem active>1</CPaginationItem>
-              <CPaginationItem>2</CPaginationItem>
-              <CPaginationItem>3</CPaginationItem>
-              <CPaginationItem aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-              </CPaginationItem>
-            </CPagination>
-      </div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span style={{ fontSize: "11px" }}>
+            {startIndex + 1}–{Math.min(endIndex, totalItems)} of {totalItems}
+          </span>
+          <CPagination size="sm">
+            <CPaginationItem
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </CPaginationItem>
+            {[...Array(totalPages)].map((_, index) => {
+              const page = index + 1;
+              return (
+                <CPaginationItem
+                  key={page}
+                  active={page === currentPage}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </CPaginationItem>
+              );
+            })}
+            <CPaginationItem
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              &raquo;
+            </CPaginationItem>
+          </CPagination>
+        </div>
       </div>
     </div>
   );

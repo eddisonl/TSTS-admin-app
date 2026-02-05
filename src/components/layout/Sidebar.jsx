@@ -4,13 +4,9 @@ import { CButton } from "@coreui/react";
 import CIcon from '@coreui/icons-react';
 import { cilList } from '@coreui/icons';
 
-export default function Sidebar({ onToggle, collapsed: externalCollapsed }) {
-  const [internalCollapsed, setInternalCollapsed] = useState(false);
-
+export default function Sidebar({ onToggle, collapsed, mobileOpen, onCloseMobile }) {
   // Use external collapsed state if provided, otherwise use internal
-  const collapsed = externalCollapsed !== undefined ? externalCollapsed : internalCollapsed;
-  const setCollapsed = externalCollapsed !== undefined ? onToggle : setInternalCollapsed;
-
+ 
   const menuItems = [
     { id: "overview", path: "/overview", label: "Overview", icon: "📊" },
     { id: "vehicles", path: "/vehicles", label: "Vehicles", icon: "🚐" },
@@ -21,7 +17,10 @@ export default function Sidebar({ onToggle, collapsed: externalCollapsed }) {
   ];
 
   return (
-    <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
+    <aside  className={`sidebar 
+      ${collapsed ? "collapsed" : ""} 
+      ${mobileOpen ? "mobile-open" : ""}
+    `}>
       <div className="sidebar-header">
         {!collapsed && (
           <span>
@@ -40,7 +39,7 @@ export default function Sidebar({ onToggle, collapsed: externalCollapsed }) {
             top: collapsed ? "auto" : "10px",
             zIndex: 1001
           }}
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={onToggle}
         >
           <CIcon icon={cilList} className="text-gray-600" style={{width: "20px", height: "20px"}} />
         </CButton>
@@ -51,6 +50,7 @@ export default function Sidebar({ onToggle, collapsed: externalCollapsed }) {
           <NavLink
             key={item.id}
             to={item.path}
+            onClick={onCloseMobile}
             className={({ isActive }) =>
               `nav-item ${isActive ? "active" : ""} ${collapsed ? "collapsed" : ""}`
             }

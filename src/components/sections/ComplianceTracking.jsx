@@ -1,12 +1,22 @@
-import React,{useState} from "react";
-import { CTable, CTableHead, CTableBody, CTableRow,CTableHeaderCell, CBadge, CPagination, CPaginationItem, CFormInput} from "@coreui/react";
+import React, { useState } from "react";
+import {
+  CTable,
+  CTableHead,
+  CTableBody,
+  CTableRow,
+  CTableHeaderCell,
+  CBadge,
+  CPagination,
+  CPaginationItem,
+  CFormInput,
+} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cibReadme, cilPen, cilPencil, cilTrash } from "@coreui/icons";
 
 export default function ComplianceTracking() {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10
-  const [searchViolation, setSearchViolation] = useState ("")
+  const itemsPerPage = 10;
+  const [searchViolation, setSearchViolation] = useState("");
 
   const [violations] = useState([
     {
@@ -42,7 +52,7 @@ export default function ComplianceTracking() {
       status: "resolved",
     },
     {
-      id:5,
+      id: 5,
       vehicle: "GT-2347",
       driver: "Isaac Owusu",
       violation: "Missing Documents",
@@ -88,14 +98,16 @@ export default function ComplianceTracking() {
       violation: "Missing Documents",
       date: "2024-01-08",
       status: "resolved",
-    },    {
+    },
+    {
       id: 11,
       vehicle: "GT-2347",
       driver: "Isaac Owusu",
       violation: "Missing Documents",
       date: "2024-01-08",
       status: "resolved",
-    },    {
+    },
+    {
       id: 12,
       vehicle: "GT-2347",
       driver: "Isaac Owusu",
@@ -112,19 +124,27 @@ export default function ComplianceTracking() {
       .includes(searchViolation.toLowerCase())
   );
 
-  const totalItems = violations.length
-  const totalPages = Math.ceil(totalItems / itemsPerPage)
+  const totalItems = violations.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const endIndex = startIndex + itemsPerPage
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
 
-  const currentItems = filteredViolations.slice(startIndex, endIndex)
+  const currentItems = filteredViolations.slice(startIndex, endIndex);
 
   return (
     <div className="section">
       <h2 className="section-title">Compliance Tracking</h2>
 
-      <div style={{display:"flex", width:'100%', justifyContent:'space-between', marginBottom:'1em'}} className="compliance-stats">
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          marginBottom: "1em",
+        }}
+        className="compliance-stats"
+      >
         <div className="compliance-card">
           <p className="text-sm text-400">Total Violations</p>
           <p className="text-3xl font-bold">47</p>
@@ -139,15 +159,21 @@ export default function ComplianceTracking() {
         </div>
       </div>
 
-      <CFormInput type="search" size="sm" placeholder="search violations..." value={searchViolation}
-       onChange={(e) => {
-        setSearchViolation(e.target.value);
-        setCurrentPage(1)
-       }} />
+      <CFormInput
+        className="search-input"
+        type="search"
+        size="sm"
+        placeholder="search violations..."
+        value={searchViolation}
+        onChange={(e) => {
+          setSearchViolation(e.target.value);
+          setCurrentPage(1);
+        }}
+      />
 
       <div className="table-container">
         {/* <span style={{height:"18em", overflowY:"scroll", display:'flex', flexDirection:'column'}}> */}
-        <CTable striped hover className="data-table" >
+        <CTable striped hover className="data-table">
           <CTableHead color="danger">
             <CTableRow>
               <CTableHeaderCell>Vehicle</CTableHeaderCell>
@@ -155,25 +181,50 @@ export default function ComplianceTracking() {
               <CTableHeaderCell>Violation Type</CTableHeaderCell>
               <CTableHeaderCell>Date Reported</CTableHeaderCell>
               <CTableHeaderCell>Status</CTableHeaderCell>
-              <CTableHeaderCell style={{textAlign:"center"}}>Actions</CTableHeaderCell>
+              <CTableHeaderCell style={{ textAlign: "center" }}>
+                Actions
+              </CTableHeaderCell>
             </CTableRow>
           </CTableHead>
-          <CTableBody >
+          <CTableBody>
             {currentItems.map((violation) => (
               <CTableRow key={violation.id}>
-                <CTableHeaderCell className="font-semibold">{violation.vehicle}</CTableHeaderCell>
+                <CTableHeaderCell className="font-semibold">
+                  {violation.vehicle}
+                </CTableHeaderCell>
                 <CTableHeaderCell>{violation.driver}</CTableHeaderCell>
                 <CTableHeaderCell>{violation.violation}</CTableHeaderCell>
                 <CTableHeaderCell>{violation.date}</CTableHeaderCell>
                 <CTableHeaderCell>
-                  <CBadge color={violation.status === "pending" ? "danger" : "success"} className={`badge badge-${violation.status}`}>
+                  <CBadge
+                    color={
+                      violation.status === "pending" ? "danger" : "success"
+                    }
+                    className={`badge badge-${violation.status}`}
+                  >
                     {violation.status.charAt(0).toUpperCase() +
                       violation.status.slice(1)}
                   </CBadge>
                 </CTableHeaderCell>
-                <CTableHeaderCell style={{display:'flex', gap:"1em", justifyContent:'center'}}>
-               <CIcon className="action-btn" style={{color:"red"}} icon={cilTrash}/>
-               <CIcon className="action-btn" style={{color:"blue"}} icon={cibReadme}/>
+                <CTableHeaderCell>
+                  <span
+                    style={{
+                      display: "flex",
+                      gap: "1em",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <CIcon
+                      className="action-btn"
+                      style={{ color: "red" }}
+                      icon={cilTrash}
+                    />
+                    <CIcon
+                      className="action-btn"
+                      style={{ color: "blue" }}
+                      icon={cibReadme}
+                    />
+                  </span>
                 </CTableHeaderCell>
               </CTableRow>
             ))}
@@ -181,40 +232,45 @@ export default function ComplianceTracking() {
         </CTable>
         {/* </span> */}
 
-        <div style={{display:'flex', justifyContent:'space-between',alignItems:"flex-end"}}>
-        <span style={{fontSize:'11px'}}>
-        {startIndex + 1}–{Math.min(endIndex, totalItems)} of {totalItems}
-        </span>
-        <CPagination size="sm">
-        <CPaginationItem
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage(currentPage - 1)}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+          }}
         >
-          &laquo;
-        </CPaginationItem>
-
-        {[...Array(totalPages)].map((_, index) => {
-          const page = index + 1;
-          return (
+          <span style={{ fontSize: "11px" }}>
+            {startIndex + 1}–{Math.min(endIndex, totalItems)} of {totalItems}
+          </span>
+          <CPagination size="sm">
             <CPaginationItem
-              key={page}
-              active={page === currentPage}
-              onClick={() => setCurrentPage(page)}
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
             >
-              {page}
-      </CPaginationItem>
-    );
-  })}
+              &laquo;
+            </CPaginationItem>
 
-  <CPaginationItem
-    disabled={currentPage === totalPages}
-    onClick={() => setCurrentPage(currentPage + 1)}
-  >
-    &raquo;
-  </CPaginationItem>
-        </CPagination>
+            {[...Array(totalPages)].map((_, index) => {
+              const page = index + 1;
+              return (
+                <CPaginationItem
+                  key={page}
+                  active={page === currentPage}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </CPaginationItem>
+              );
+            })}
+
+            <CPaginationItem
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              &raquo;
+            </CPaginationItem>
+          </CPagination>
         </div>
-
       </div>
     </div>
   );

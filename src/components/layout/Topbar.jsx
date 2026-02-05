@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CFormSelect } from "@coreui/react"
+import { CFormSelect, CButton } from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import { cilList } from "@coreui/icons";
 
-export default function Topbar({ user, onLogout, activeSection }) {
+export default function Topbar({
+  user,
+  onLogout,
+  activeSection,
+  onToggleMobileSidebar,
+}) {
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [notifications, setNotifications] = useState([
@@ -40,7 +47,8 @@ export default function Topbar({ user, onLogout, activeSection }) {
     {
       id: 2,
       name: "Profile Settings",
-    },  {
+    },
+    {
       id: 3,
       name: "Change Password",
     },
@@ -48,7 +56,7 @@ export default function Topbar({ user, onLogout, activeSection }) {
       id: 4,
       name: "Logout",
     },
-  ]
+  ];
   const [showNotifications, setShowNotifications] = useState(false);
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -71,6 +79,18 @@ export default function Topbar({ user, onLogout, activeSection }) {
             Monitor and manage transport operations
           </p>
         </div>
+        <CButton
+          className="mobile-sidebar-toggle"
+          onClick={onToggleMobileSidebar}
+          style={{
+            background: "none",
+            border: "none",
+            padding: "8px",
+            // display: "none",
+          }}
+        >
+          <CIcon icon={cilList} size="lg" />
+        </CButton>
 
         <div className="topbar-actions">
           <div className="relative">
@@ -114,25 +134,24 @@ export default function Topbar({ user, onLogout, activeSection }) {
             )}
           </div>
 
-         <div className="user-info" style={{gap:'0.5em'}}>
-            <button onClick={() => setShowUserMenu(!showUserMenu)}
+          <div className="user-info" style={{ gap: "0.5em" }}>
+            <button
+              onClick={() => setShowUserMenu(!showUserMenu)}
               className="user-button"
             >
               <div className="user-avatar">👤</div>
             </button>
-            <span >
-                <p className="text-sm font-semibold text-gray-900">
-                  {user.name}
-                </p>
-                <p className="text-xs text-gray-500">{user.email}</p>
+            <span>
+              <p className="text-sm font-semibold text-gray-900">{user.name}</p>
+              <p className="text-xs text-gray-500">{user.email}</p>
             </span>
-              </div>
-          <div className="relative" style={{display:'flex', justifyContent:'space-between'}}>        
-
-            
+          </div>
+          <div
+            className="relative"
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
             {showUserMenu && (
               <div className="user-menu">
-    
                 <button onClick={handleSettingsClick} className="menu-item">
                   ⚙️ Settings
                 </button>

@@ -84,8 +84,6 @@
   --sidebar-ring: oklch(0.439 0 0);
 }
 
-
-
 * {
   margin: 0;
   padding: 0;
@@ -321,9 +319,9 @@ body,
   position: fixed;
   top: 0;
   left: 0;
-  width: 250px;
+  width: 200px;
   background: white;
-  transition: width 0.3s ease;
+  transition: all 0.3s ease;
   z-index: 1000;
   border-right: 1px solid #e5e7eb;
   display: flex;
@@ -332,9 +330,12 @@ body,
   overflow-y: auto;
 }
 .sidebar.collapsed {
-  width: 80px;
+  width: 100px;
 }
-
+.search-input {
+  width: 50%;
+  margin-bottom: 1em;
+}
 .sidebar-header {
   padding: 24px;
   border-bottom: 1px solid #e5e7eb;
@@ -344,7 +345,7 @@ body,
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  padding: 10px;
   gap: 8px;
   flex: 1;
 }
@@ -385,7 +386,7 @@ body,
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  margin-left: 250px;
+  margin-left: 200px;
   transition: margin-left 0.3s ease;
 }
 
@@ -1039,7 +1040,8 @@ body,
   color: var(--accent);
   border: 1px solid var(--accent);
 }
-.stats-grid, .compliance-stats{
+.stats-grid,
+.compliance-stats {
   margin-top: 1em;
   display: flex;
   justify-content: space-between;
@@ -1047,21 +1049,23 @@ body,
   color: #f1f1f1;
   padding: 1em;
   gap: 1em;
+  overflow-x: scroll;
   border-radius: 0.4em;
 }
-.stat-card, .compliance-card{
+.stat-card,
+.compliance-card {
   background-color: #8eb1a6;
   padding: 0.4em;
   border-radius: 0.4em;
   width: 50%;
   /* min-height: 6em; */
-  box-shadow:  0 4px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
-.data-table{
+.data-table {
   width: 100%;
   font-size: 12px;
 }
-.action-btn{
+.action-btn {
   cursor: pointer;
   background: transparent;
   border: none;
@@ -1069,4 +1073,39 @@ body,
 p {
   margin-top: 0;
   margin-bottom: 0 !important;
+}
+@media (max-width: 650.98px) {
+  .dashboard-layout {
+    display: flex;
+  }
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    z-index: 1200;
+  }
+  .sidebar.mobile-open {
+    left: 0;
+  }
+  .main-content {
+    margin-left: 0 !important;
+  }
+  .content-area {
+    overflow-y: visible !important;
+  }
+  .section {
+    margin: 0px !important;
+  }
+  .data-table {
+    font-size: 9px;
+  }
+  .topbar {
+    padding: 12px 13px;
+  }
+  .topbar-title {
+    display: none;
+  }
+  .mobile-sidebar-toggle {
+    display: block !important;
+  }
 }

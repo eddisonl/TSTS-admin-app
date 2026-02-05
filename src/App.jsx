@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import AdminLoginForm from "./components/auth/AdminLoginForm";
 import AdminDashboard from "./components/dashboard/AdminDashboard";
 import Overview from "./components/sections/Overview";
@@ -10,10 +15,9 @@ import Analytics from "./components/sections/Analytics";
 import Notifications from "./components/sections/Notifications";
 import Settings from "./components/sections/Settings";
 import Reports from "./components/sections/Reports";
-import * as icon from '@coreui/icons';
-import CIcon from '@coreui/icons-react';
-
-
+import * as icon from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
+import "./styles.css";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,13 +35,13 @@ export default function App() {
     setAdminUser(null);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const savedAdmin = localStorage.getItem("adminUser");
     if (savedAdmin) {
-      setAdminUser(JSON.parse(savedAdmin))
-      setIsLoggedIn(true)
+      setAdminUser(JSON.parse(savedAdmin));
+      setIsLoggedIn(true);
     }
-  },[])
+  }, []);
 
   return (
     <Router>
