@@ -1,4 +1,16 @@
 import React from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
+
 export default function Overview() {
   const stats = [
     { label: "Active Vehicles", value: "1,245", change: "+5.2%", icon: "🚐" },
@@ -12,6 +24,24 @@ export default function Overview() {
     { label: "Revenue (GHS)", value: "125,420", change: "+3.4%", icon: "💰" },
   ];
 
+  const revenueData = [
+    { day: "Mon", revenue: 6500 },
+    { day: "Tue", revenue: 7800 },
+    { day: "Wed", revenue: 8200 },
+    { day: "Thu", revenue: 7500 },
+    { day: "Fri", revenue: 8800 },
+    { day: "Sat", revenue: 9200 },
+    { day: "Sun", revenue: 10000 },
+  ];
+  
+  const vehicleStatusData = [
+    { name: "Active", value: 847 },
+    { name: "Maintenance", value: 198 },
+    { name: "Inactive", value: 200 },
+  ];
+  
+  const COLORS = ["#10b981", "#f59e0b", "#ef4444"];
+  
   return (
     <div className="section">
       <h2 className="section-title">System Overview</h2>
@@ -30,56 +60,47 @@ export default function Overview() {
       </div>
 
       <div className="chart-section" >
-        <div className="chart-card" >
-          <h3 className="text-lg font-semibold text-white mb-4">
+        <div className="chart-card" style={{ height: '260px', position: 'relative' }}>
+          <h3 className="text-lg font-semibold mt-3 mb-3">
             Daily Revenue Trend
           </h3>
-          <div className="chart-placeholder">
-            <p className="text-gray-400">Revenue chart visualization area</p>
-            <div className="chart-bars">
-              {[65, 78, 82, 75, 88, 92, 85].map((val, idx) => (
-                <div key={idx} className="chart-bar-container">
-                  <div
-                    className="chart-bar"
-                    style={{ height: `${val}%` }}
-                  ></div>
-                  <p className="chart-label">Day {idx + 1}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={revenueData}>
+              <XAxis dataKey="day" stroke="#9ca3af" />
+              <YAxis stroke="#9ca3af" />
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="revenue"
+                stroke="#10b981"
+                strokeWidth={3}
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+
         </div>
 
-        <div className="chart-card">
-          <h3 className="text-lg font-semibold text-white mb-4">
+        <div className="chart-card" style={{ height: '260px', position: 'relative' }}>
+          <h3 className="text-lg font-semibold mt-5 mb-2">
             Vehicle Status
           </h3>
-          <div className="status-list">
-            <div className="status-item">
-              <div
-                className="status-dot"
-                style={{ backgroundColor: "#10b981" }}
-              ></div>
-              <span>Active</span>
-              <span className="ml-auto font-semibold">847 (68%)</span>
-            </div>
-            <div className="status-item">
-              <div
-                className="status-dot"
-                style={{ backgroundColor: "#f59e0b" }}
-              ></div>
-              <span>In Maintenance</span>
-              <span className="ml-auto font-semibold">198 (16%)</span>
-            </div>
-            <div className="status-item">
-              <div
-                className="status-dot"
-                style={{ backgroundColor: "#ef4444" }}
-              ></div>
-              <span>Inactive</span>
-              <span className="ml-auto font-semibold">200 (16%)</span>
-            </div>
-          </div>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={vehicleStatusData}
+                dataKey="value"
+                innerRadius={60}
+                outerRadius={90}
+                paddingAngle={5}
+              >
+                {vehicleStatusData.map((_, index) => (
+                  <Cell key={index} fill={COLORS[index]} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

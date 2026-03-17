@@ -1,11 +1,48 @@
 import React, { useState } from "react";
+import {
+  CTable,
+  CTableHead,
+  CTableBody,
+  CTableRow,
+  CTableHeaderCell,
+  CTableDataCell,
+  CBadge,
+  CPagination,
+  CPaginationItem,
+  CFormInput,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CRow,
+  CCol,
+  CFormLabel,
+  CFormSelect,
+  CButton,
+  CFormSwitch
+} from "@coreui/react";
+
+const InitialData = {
+  route : "",
+  revenue: "",
+  driver:"",
+  vehicle: "",
+  compliance: "",
+  system: "",
+  
+}
 
 export default function Reports() {
   const [reportGroup, setReportGroup] = useState("revenue");
   const [reportName, setReportName] = useState("monthly-revenue");
   const [sortBy, setSortBy] = useState("date-desc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false)
+  const itemsPerPage = 10;
+  const [search, setSearch] = useState("");
   const [generatedReport, setGeneratedReport] = useState(null);
-
+  const [formData, setFormData] = useState(InitialData)
+  
   const reportGroups = {
     revenue: {
       label: "Revenue Reports",
@@ -195,16 +232,24 @@ export default function Reports() {
     return mockData[reportName] || [];
   };
 
-  const handleGenerateReport = () => {
-    const data = generateReportData();
-    setGeneratedReport({
-      group: reportGroups[reportGroup].label,
-      name: reportGroups[reportGroup].reports.find((r) => r.id === reportName)
-        .name,
-      sortBy: sortOptions.find((s) => s.value === sortBy).label,
-      data: data,
-      generatedAt: new Date().toLocaleDateString(),
-    });
+  const handleGenerateReport = async() => {
+    try {
+      setLoading(true)
+      const data = generateReportData();
+      setGeneratedReport({
+        group: reportGroups[reportGroup].label,
+        name: reportGroups[reportGroup].reports.find((r) => r.id === reportName)
+          .name,
+        sortBy: sortOptions.find((s) => s.value === sortBy).label,
+        data: data,
+        generatedAt: new Date().toLocaleDateString(),
+      });
+    } catch (error) {
+      console.log('generate report:', error);
+      
+    } finally {
+      setLoading(false)
+    }
   };
 
   const getReportColumns = () => {
@@ -248,6 +293,21 @@ export default function Reports() {
     };
     return labels[column] || column;
   };
+
+  const filteredReports = generatedReport?.data?.filter((v) =>
+    Object.values(v)
+      .join(" ")
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  ) || [];
+
+  const totalItems = filteredReports.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const currentItems = filteredReports.slice(startIndex, endIndex);
 
   return (
     <div className="section">
@@ -330,19 +390,39 @@ export default function Reports() {
           </div>
 
           <div className="table-container">
-            <table className="data-table">
-              <thead>
-                <tr>
+              <CFormInput
+                    className="search-input"
+                    type="search"
+                    size="sm"
+                    placeholder="search..."
+                    value={search}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                  />
+            <CTable striped hover className="data-table">
+              <CTableHead>
+                <CTableRow>
                   {getReportColumns().map((col) => (
-                    <th key={col}>{getColumnLabel(col)}</th>
+                    <CTableHeaderCell style={{textAlign:'center'}} key={col}>{getColumnLabel(col)}</CTableHeaderCell>
                   ))}
-                </tr>
-              </thead>
-              <tbody>
-                {generatedReport.data.map((row, idx) => (
-                  <tr key={idx}>
+                </CTableRow>
+              </CTableHead>
+              <CTableBody>
+              { loading ? (
+                <CTableRow style={{display:"flex", justifyContent:"center"}}>
+                  <CTableDataCell >Loading...</CTableDataCell>
+                </CTableRow>
+                ) : currentItems.length === 0 ? (
+                  <CTableRow style={{display:"flex", justifyContent:"center", color:"gray"}}>
+                    <CTableDataCell>No recorded reports</CTableDataCell>
+                  </CTableRow>
+                ) : (
+                currentItems.map((row, idx) => (
+                  <CTableRow key={idx}>
                     {getReportColumns().map((col) => (
-                      <td key={col}>
+                      <CTableDataCell style={{textAlign:'center'}} key={col}>
                         {col === "severity" ? (
                           <span
                             className={`badge badge-${row[col].toLowerCase()}`}
@@ -366,12 +446,43 @@ export default function Reports() {
                         ) : (
                           row[col]
                         )}
-                      </td>
+                      </CTableDataCell>
                     ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                  </CTableRow>
+                )))}
+              </CTableBody>
+            </CTable>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ fontSize: "11px" }}>
+                {startIndex + 1}–{Math.min(endIndex, totalItems)} of {totalItems}
+              </span>
+              <CPagination size="sm">
+                <CPaginationItem
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                >
+                  &laquo;
+                </CPaginationItem>
+                {[...Array(totalPages)].map((_, index) => {
+                  const page = index + 1;
+                  return (
+                    <CPaginationItem
+                      key={page}
+                      active={page === currentPage}
+                      onClick={() => setCurrentPage(page)}
+                    >
+                      {page}
+                    </CPaginationItem>
+                  );
+                })}
+                <CPaginationItem
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  &raquo;
+                </CPaginationItem>
+              </CPagination>
+            </div>
           </div>
 
           <div className="report-summary">

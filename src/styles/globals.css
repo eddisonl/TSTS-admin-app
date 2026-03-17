@@ -265,7 +265,7 @@ body,
 }
 
 .btn-primary {
-  padding: 12px 24px;
+  padding: 10px 15px;
   background: var(--accent);
   color: white;
   border: none;
@@ -333,7 +333,7 @@ body,
   width: 100px;
 }
 .search-input {
-  width: 50%;
+  width: 30%;
   margin-bottom: 1em;
 }
 .sidebar-header {
@@ -439,13 +439,13 @@ body,
 
 .notification-badge {
   position: absolute;
-  top: -8px;
+  top: -1px;
   right: -8px;
   background: var(--danger);
   color: white;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -965,12 +965,12 @@ body,
 }
 
 .filter-select {
-  padding: 12px 16px;
+  padding: 7px 9px;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   color: var(--gray-900);
-  font-size: 14px;
+  font-size: 12px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -982,7 +982,7 @@ body,
 }
 
 .btn-generate-report {
-  padding: 12px 24px;
+  padding: 9px;
   background: var(--accent);
   color: white;
   border: none;
@@ -1010,21 +1010,21 @@ body,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 15px;
   background: #f9fafb;
   border-radius: 8px;
   border: 1px solid #e5e7eb;
 }
 
 .report-result-title {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--gray-900);
   margin: 0 0 8px 0;
 }
 
 .report-meta {
-  font-size: 12px;
+  font-size: 10px;
   color: var(--gray-500);
   margin: 0;
 }
@@ -1035,10 +1035,14 @@ body,
 }
 
 .btn-export {
-  padding: 10px 16px;
+  padding: 7px 5px;
+  font-size: 12px;
   background: rgba(255, 255, 255, 0.336);
   color: var(--accent);
   border: 1px solid var(--accent);
+}
+.stats-grid::-webkit-scrollbar{
+  display: none
 }
 .stats-grid,
 .compliance-stats {
@@ -1050,6 +1054,8 @@ body,
   padding: 1em;
   gap: 1em;
   overflow-x: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   border-radius: 0.4em;
 }
 .stat-card,
@@ -1075,6 +1081,9 @@ p {
   margin-bottom: 0 !important;
 }
 @media (max-width: 650.98px) {
+  .table-container {
+    overflow-x: scroll;
+  }
   .dashboard-layout {
     display: flex;
   }
@@ -1108,4 +1117,8 @@ p {
   .mobile-sidebar-toggle {
     display: block !important;
   }
+}
+.labelStyle{
+  font-weight: 600;
+  font-size: 13px;
 }

@@ -18,6 +18,7 @@ import Reports from "./components/sections/Reports";
 import * as icon from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import "./styles.css";
+import { ToastContainer } from "react-toastify";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -118,6 +119,7 @@ export default function App() {
           </Routes>
         )}
       </div>
+      <ToastContainer/>
     </Router>
   );
 }

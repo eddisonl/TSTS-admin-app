@@ -74,8 +74,8 @@ export default function Topbar({
     <div className="topbar">
       <div className="topbar-content">
         <div className="topbar-title">
-          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-bold">Admin</h1>
+          <p className="text-sm text-gray-300">
             Monitor and manage transport operations
           </p>
         </div>
@@ -97,10 +97,11 @@ export default function Topbar({
             <button
               onClick={handleNotificationClick}
               className="notification-button"
+              
             >
-              <span className="text-2xl">🔔</span>
+              <span className="text-2xl" style={{fontSize:"14px"}}>🔔</span>
               {unreadCount > 0 && (
-                <span className="notification-badge">{unreadCount}</span>
+                <span className="notification-badge" >{unreadCount}</span>
               )}
             </button>
 
