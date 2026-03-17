@@ -269,30 +269,41 @@ export default function Reports() {
     return columns[reportName] || [];
   };
 
-  const getColumnLabel = (column) => {
-    const labels = {
-      name: "Month",
-      amount: "Revenue (GHS)",
-      trips: "Trips",
-      vehicles: "Active Vehicles",
-      route: "Route",
-      revenue: "Revenue (GHS)",
-      avgFare: "Avg Fare",
-      driver: "ID",
-      name: "Name",
-      rating: "Rating",
-      vehicle: "Vehicle ID",
-      status: "Status",
-      mileage: "Mileage (km)",
-      lastService: "Last Service",
-      health: "Health Status",
-      id: "Violation ID",
-      violation: "Violation Type",
-      date: "Date",
-      severity: "Severity",
-    };
-    return labels[column] || column;
+const getColumnLabel = (column) => {
+  const defaultLabels = {
+    amount: "Revenue (GHS)",
+    trips: "Trips",
+    vehicles: "Active Vehicles",
+    route: "Route",
+    revenue: "Revenue (GHS)",
+    avgFare: "Avg Fare",
+    driver: "ID",
+    rating: "Rating",
+    vehicle: "Vehicle ID",
+    status: "Status",
+    mileage: "Mileage (km)",
+    lastService: "Last Service",
+    health: "Health Status",
+    id: "Violation ID",
+    violation: "Violation Type",
+    date: "Date",
+    severity: "Severity",
   };
+
+  const contextualLabels = {
+    "monthly-revenue": {
+      name: "Month",
+    },
+    "driver-performance": {
+      name: "Name",
+    },
+    // Add other reports if needed in future
+  };
+
+  const reportLabels = contextualLabels[reportName] || {};
+  const labels = { ...defaultLabels, ...reportLabels };
+  return labels[column] || column;
+};
 
   const filteredReports = generatedReport?.data?.filter((v) =>
     Object.values(v)
